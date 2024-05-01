@@ -56,6 +56,7 @@ Array.prototype.last = function () {
   const introductionElement = document.getElementById("introduction");
   const perfectElement = document.getElementById("perfect");
   const restartButton = document.getElementById("restart");
+  const startButton = document.getElementById("start");
   const scoreElement = document.getElementById("score");
   
   // Initialize layout
@@ -72,6 +73,7 @@ Array.prototype.last = function () {
     introductionElement.style.opacity = 1;
     perfectElement.style.opacity = 0;
     restartButton.style.display = "none";
+    startButton.style.display = "block";
     scoreElement.innerText = score;
   
     // The first platform is always the same
@@ -148,11 +150,24 @@ Array.prototype.last = function () {
   
 
 
+document.addEventListener("DOMContentLoaded", function () {
+  const themeSelect = document.getElementById("theme");
+  const startButton = document.getElementById("start");
+
+  startButton.addEventListener("click", function () {
+      themeSelect.disabled = true;
+
+      startFlag = true;
+
+  });
+});
+
 
 
   // If space was pressed restart the game
   window.addEventListener("keydown", function (event) {
     if (event.key == " ") {
+      if (!startFlag) return;
       event.preventDefault();
       resetGame();
       return;
@@ -161,6 +176,7 @@ Array.prototype.last = function () {
   
   window.addEventListener("mousedown", function (event) {
     if (phase == "waiting") {
+      if (!startFlag) return;
       lastTimestamp = undefined;
       introductionElement.style.opacity = 0;
       phase = "stretching";
@@ -170,11 +186,13 @@ Array.prototype.last = function () {
   
   window.addEventListener("mouseup", function (event) {
     if (phase == "stretching") {
+      if (!startFlag) return;
       phase = "turning";
     }
   });
   
   window.addEventListener("resize", function (event) {
+    if (!startFlag) return;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     draw();
@@ -195,6 +213,7 @@ Array.prototype.last = function () {
       case "waiting":
         return; // Stop the loop
       case "stretching": {
+        if (!startFlag) return;
         sticks.last().length += (timestamp - lastTimestamp) / stretchingSpeed;
         break;
       }
@@ -331,6 +350,12 @@ Array.prototype.last = function () {
     restartButton.style.display = "none";
   });
   
+  startButton.addEventListener("click", function (event) {
+    event.preventDefault();
+    startGame()
+    startButton.style.display = "none";
+  });
+
   function drawPlatforms() {
     platforms.forEach(({ x, w }) => {
       // Draw platform
@@ -512,4 +537,22 @@ Array.prototype.last = function () {
     const sineBaseY = window.innerHeight - baseHeight;
     return Math.sinus(x) * amplitude + sineBaseY;
   }
+
+
+
+function startGame() {
+    lastTimestamp = undefined;
+    introductionElement.style.opacity = 0;
+    phase = "stretching";
+    window.requestAnimationFrame(animate);
+}
+
+
+
+
+
+
+
+
+
   
