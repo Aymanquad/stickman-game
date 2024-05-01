@@ -64,7 +64,11 @@ Array.prototype.last = function () {
   
   // Resets game variables and layouts but does not start the game (game starts on keypress)
   function resetGame() {
+    const themeSelect = document.getElementById("theme");
     // Reset game progress
+    startFlag = false;
+    themeSelect.disabled = false;
+
     phase = "waiting";
     lastTimestamp = undefined;
     sceneOffset = 0;
@@ -178,7 +182,6 @@ document.addEventListener("DOMContentLoaded", function () {
     if (phase == "waiting") {
       if (!startFlag) return;
       lastTimestamp = undefined;
-      introductionElement.style.opacity = 0;
       phase = "stretching";
       window.requestAnimationFrame(animate);
     }
@@ -187,6 +190,7 @@ document.addEventListener("DOMContentLoaded", function () {
   window.addEventListener("mouseup", function (event) {
     if (phase == "stretching") {
       if (!startFlag) return;
+      introductionElement.style.opacity = 0;
       phase = "turning";
     }
   });
@@ -543,7 +547,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function startGame() {
     lastTimestamp = undefined;
     introductionElement.style.opacity = 0;
-    phase = "stretching";
+    phase = "waiting";
     window.requestAnimationFrame(animate);
 }
 
