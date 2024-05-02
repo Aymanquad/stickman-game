@@ -52,12 +52,91 @@ Array.prototype.last = function () {
   canvas.height = window.innerHeight;
   
   const ctx = canvas.getContext("2d");
+
+  function drawRedCap(ctx) {
+    // Red cap
+    ctx.fillStyle = "red";
+    ctx.fillRect(-heroWidth / 2 - 1, -12, heroWidth + 2, 4.5);
+    ctx.beginPath();
+    ctx.moveTo(-9, -14.5);
+    ctx.lineTo(-17, -18.5);
+    ctx.lineTo(-14, -8.5);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(-10, -10.5);
+    ctx.lineTo(-15, -3.5);
+    ctx.lineTo(-5, -7);
+    ctx.fill();
+}
+
+function drawBlueCap(ctx) {
+    // Blue cap
+    ctx.fillStyle = "blue";
+    ctx.fillRect(-heroWidth / 2 - 1, -12, heroWidth + 2, 4.5);
+    ctx.beginPath();
+    ctx.moveTo(-9, -14.5);
+    ctx.lineTo(-17, -18.5);
+    ctx.lineTo(-14, -8.5);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(-10, -10.5);
+    ctx.lineTo(-15, -3.5);
+    ctx.lineTo(-5, -7);
+    ctx.fill();
+}
+
+    
+
   
   const introductionElement = document.getElementById("introduction");
   const perfectElement = document.getElementById("perfect");
   const restartButton = document.getElementById("restart");
   const startButton = document.getElementById("start");
   const scoreElement = document.getElementById("score");
+
+  let isNightMode = false;
+  let isSpringMode = false;
+  let isOceanMode = false;
+
+
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const themeSelect = document.getElementById("theme");
+
+    themeSelect.addEventListener("change", function () {
+        const selectedTheme = themeSelect.value;
+        if (selectedTheme === "night") {
+            enableNightMode();
+        } else {
+            disableNightMode();
+        }
+    });
+});
+document.addEventListener("DOMContentLoaded", function () {
+  const themeSelect = document.getElementById("theme");
+
+  themeSelect.addEventListener("change", function () {
+      const selectedTheme = themeSelect.value;
+      if (selectedTheme === "spring") {
+          enableSpringMode();
+      } else {
+          disableSpringMode();
+      }
+  });
+});
+document.addEventListener("DOMContentLoaded", function () {
+  const themeSelect = document.getElementById("theme");
+
+  themeSelect.addEventListener("change", function () {
+      const selectedTheme = themeSelect.value;
+      if (selectedTheme === "ocean") {
+          enableOceanMode();
+      } else {
+          disableOceanMode();
+      }
+  });
+});
+
   
   // Initialize layout
   resetGame();
@@ -68,7 +147,7 @@ Array.prototype.last = function () {
     // Reset game progress
     startFlag = false;
     themeSelect.disabled = false;
-
+ 
     phase = "waiting";
     lastTimestamp = undefined;
     sceneOffset = 0;
@@ -106,7 +185,7 @@ Array.prototype.last = function () {
     heroX = platforms[0].x + platforms[0].w - heroDistanceFromEdge;
     heroY = 0;
   
-    draw();
+    draw(ctx);
   }
   
   function generateTree() {
@@ -199,7 +278,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!startFlag) return;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    draw();
+    draw(ctx);
   });
   
   window.requestAnimationFrame(animate);
@@ -300,7 +379,7 @@ document.addEventListener("DOMContentLoaded", function () {
         throw Error("Wrong phase");
     }
   
-    draw();
+    draw(ctx);
     window.requestAnimationFrame(animate);
   
     lastTimestamp = timestamp;
@@ -327,7 +406,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return [platformTheStickHits, false];
   }
   
-  function draw() {
+  function draw(ctx) {
     ctx.save();
     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
   
@@ -341,7 +420,7 @@ document.addEventListener("DOMContentLoaded", function () {
   
     // Draw scene
     drawPlatforms();
-    drawHero();
+    drawHero(ctx);
     drawSticks();
   
     // Restore transformation
@@ -383,24 +462,25 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   }
-  
-  function drawHero() {
+
+ 
+  function drawHero(ctx) {
     ctx.save();
     ctx.fillStyle = "black";
     ctx.translate(
-      heroX - heroWidth / 2,
-      heroY + canvasHeight - platformHeight - heroHeight / 2
+        heroX - heroWidth / 2,
+        heroY + canvasHeight - platformHeight - heroHeight / 2
     );
-  
+
     // Body
     drawRoundedRect(
-      -heroWidth / 2,
-      -heroHeight / 2,
-      heroWidth,
-      heroHeight - 4,
-      5
+        -heroWidth / 2,
+        -heroHeight / 2,
+        heroWidth,
+        heroHeight - 4,
+        5
     );
-  
+
     // Legs
     const legDistance = 5;
     ctx.beginPath();
@@ -409,29 +489,75 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.beginPath();
     ctx.arc(-legDistance, 11.5, 3, 0, Math.PI * 2, false);
     ctx.fill();
-  
+
     // Eye
     ctx.beginPath();
     ctx.fillStyle = "white";
     ctx.arc(5, -7, 3, 0, Math.PI * 2, false);
     ctx.fill();
+
+    const capSelect = document.getElementById("cap");
+
+    drawRedCap(ctx);
+    
+    capSelect.addEventListener('change', function() {
+
+      let selectedCap = capSelect.value; // Default to red if not selected
+      if (!selectedCap || selectedCap == undefined) {
+        selectedCap = "red"; // Assign the default value "red"
+      }
+      console.log(selectedCap);
+      updateHeroCap(ctx, selectedCap);
+
+  });
+  //   // Bandana
+  // const capSelect = document.getElementById("cap");
+
+  //   capSelect.addEventListener("change", function () {
+  //     const selectedCap = capSelect.value;
+  //     console.log("Selected Cap:", selectedCap); // Debug log
+  //     if (selectedCap === "blue") {
+  //         drawBlueCap(ctx);
+  //         console.log("Should be blue now");
+  //         draw(ctx);
+  //     } else {
+  //         drawRedCap(ctx);
+  //         draw(ctx);
+  //     }
+  // });
   
-    // Band
-    ctx.fillStyle = "red";
-    ctx.fillRect(-heroWidth / 2 - 1, -12, heroWidth + 2, 4.5);
-    ctx.beginPath();
-    ctx.moveTo(-9, -14.5);
-    ctx.lineTo(-17, -18.5);
-    ctx.lineTo(-14, -8.5);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(-10, -10.5);
-    ctx.lineTo(-15, -3.5);
-    ctx.lineTo(-5, -7);
-    ctx.fill();
+
+    
+
   
-    ctx.restore();
-  }
+  //drawBlueCap(ctx);
+
+  ctx.restore();
+}
+
+function updateHeroCap(ctx, selectedCap) {
+    // Clear previous cap
+    ctx.clearRect(
+        -heroWidth / 2 - 1,
+        -12,
+        heroWidth + 2,
+        4.5
+    );
+
+    // Draw new cap based on selected option
+    switch (selectedCap) {
+        case "red":
+            drawRedCap(ctx);
+            break;
+        case "blue":
+            drawBlueCap(ctx);
+            break;
+        default:
+            // Do nothing for no cap option
+            break;
+    }
+}
+
   
   function drawRoundedRect(x, y, width, height, radius) {
     ctx.beginPath();
@@ -445,6 +571,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.lineTo(x + radius, y);
     ctx.arcTo(x, y, x, y + radius, radius);
     ctx.fill();
+    
   }
   
   function drawSticks() {
@@ -468,20 +595,96 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   
   function drawBackground() {
-    // Draw sky
-    var gradient = ctx.createLinearGradient(0, 0, 0, window.innerHeight);
-    gradient.addColorStop(0, "#BBD691");
-    gradient.addColorStop(1, "#FEF1E1");
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
-  
-    // Draw hills
-    drawHill(hill1BaseHeight, hill1Amplitude, hill1Stretch, "#95C629");
-    drawHill(hill2BaseHeight, hill2Amplitude, hill2Stretch, "#659F1C");
-  
-    // Draw trees
-    trees.forEach((tree) => drawTree(tree.x, tree.color));
-  }
+    if (isNightMode) {
+        // Night mode colors
+        ctx.fillStyle = "#07224B"; // Dark blue sky
+        ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+
+        // Draw moon
+        drawMoon();
+
+        // Dark green hills
+        drawHill(hill1BaseHeight, hill1Amplitude, hill1Stretch, "#004225");
+        drawHill(hill2BaseHeight, hill2Amplitude, hill2Stretch, "#00381C");
+
+        // Darker trees
+        trees.forEach((tree) => drawTree(tree.x, "#3D4826"));
+    } else if (isSpringMode) {
+        // Spring mode colors
+        ctx.fillStyle = "#BEE7FD"; // Light blue sky with a tint of yellow
+        ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+
+        // Pink trees
+        trees.forEach((tree) => drawTree(tree.x, "#FFC0CB"));
+
+        // Yellowish-orange hills
+        drawHill(hill1BaseHeight, hill1Amplitude, hill1Stretch, "#FFD700");
+        drawHill(hill2BaseHeight, hill2Amplitude, hill2Stretch, "#FFA500");
+
+        // Pink leaves dropping from sky
+        for (let i = 0; i < 20; i++) {
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight;
+            drawLeaf(x, y);
+        }
+    } else if (isOceanMode) {
+        // Ocean mode colors
+        const skyColor = "#87CEEB"; // Light blue sky
+        const plateauColor = ["#4682B4", "#4169E1", "#6495ED"]; // Shades of blue for plateau
+        const sunColor = "#FFA500"; // Orange sun color
+        const oceanColor = "#1E90FF"; // Deep blue ocean color
+
+        // Draw sky
+        ctx.fillStyle = skyColor;
+        ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+
+        drawHill(hill1BaseHeight, hill1Amplitude, hill1Stretch, "#4169E1");
+        drawHill(hill2BaseHeight, hill2Amplitude, hill2Stretch, "#6495ED");
+
+        // Draw sun
+        drawSun();
+
+    } else {
+        // Day mode colors
+        var gradient = ctx.createLinearGradient(0, 0, 0, window.innerHeight);
+        gradient.addColorStop(0, "#BBD691"); // Light blue sky
+        gradient.addColorStop(1, "#FEF1E1"); // Light orange horizon
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+
+        // Green hills
+        drawHill(hill1BaseHeight, hill1Amplitude, hill1Stretch, "#95C629");
+        drawHill(hill2BaseHeight, hill2Amplitude, hill2Stretch, "#659F1C");
+
+        // Normal trees
+        trees.forEach((tree) => drawTree(tree.x, tree.color));
+    }
+}
+
+
+
+
+// Function to draw a leaf
+function drawLeaf(x, y) {
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.quadraticCurveTo(x - 10, y + 10, x - 20, y);
+    ctx.quadraticCurveTo(x - 10, y - 10, x, y);
+    ctx.fillStyle = "#FFC0CB"; // Pink color
+    ctx.fill();
+}
+
+
+function drawSun() {
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(100, 100, 30, 0, Math.PI * 2);
+  ctx.fillStyle = "#FFC100"; // Light gray moon
+  ctx.shadowColor = "#FF6500"; // Moon shadow color
+  ctx.shadowBlur = 20; // Moon shadow blur
+  ctx.fill();
+  ctx.restore();
+}
   
   // A hill is a shape under a stretched out sinus wave
   function drawHill(baseHeight, amplitude, stretch, color) {
@@ -550,8 +753,45 @@ function startGame() {
     phase = "waiting";
     window.requestAnimationFrame(animate);
 }
+function drawMoon() {
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(100, 100, 30, 0, Math.PI * 2);
+  ctx.fillStyle = "#EAEAEA"; // Light gray moon
+  ctx.shadowColor = "#EAEAEA"; // Moon shadow color
+  ctx.shadowBlur = 20; // Moon shadow blur
+  ctx.fill();
+  ctx.restore();
+}
 
+function enableNightMode() {
+  isNightMode = true;
+  draw(ctx);
+}
 
+function disableNightMode() {
+  isNightMode = false;
+  draw(ctx);
+}
+
+function enableSpringMode() {
+  isSpringMode = true;
+  draw(ctx);
+}
+
+function disableSpringMode() {
+  isSpringMode = false;
+  draw(ctx);
+}
+function enableOceanMode() {
+  isOceanMode = true;
+  draw(ctx);
+}
+
+function disableOceanMode() {
+  isOceanMode = false;
+  draw(ctx);
+}
 
 
 
