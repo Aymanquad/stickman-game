@@ -1,9 +1,26 @@
+let ninjasound = {
+  push : new Howl({
+    src: ['/sounds/ninja-soundtrack.wav'],
+    loop: true ,
+    volume : 0.17,
+  })
+}
+
+
 var walkingsound = {
   push : new Howl({
-    src: ['/footsteps.mp3']
+    src: ['/sounds/footsteps.mp3']
+  })
+}
+
+var fallingsound = {
+  push : new Howl({
+    src: ['/sounds/childs-scream-1.wav']
   })
 }
   
+let fallingSoundPlayed = false;
+
 
 Array.prototype.last = function () {
     return this[this.length - 1];
@@ -150,6 +167,9 @@ document.addEventListener("DOMContentLoaded", function () {
   
   // Resets game variables and layouts but does not start the game (game starts on keypress)
   function resetGame() {
+
+    fallingSoundPlayed = false;
+
     const themeSelect = document.getElementById("theme");
     // Reset game progress
     startFlag = false;
@@ -191,6 +211,8 @@ document.addEventListener("DOMContentLoaded", function () {
   
     heroX = platforms[0].x + platforms[0].w - heroDistanceFromEdge;
     heroY = 0;
+
+
   
     draw(ctx);
   }
@@ -249,6 +271,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
       startFlag = true;
 
+      ninjasound.push.play();
+
   });
 });
 
@@ -289,6 +313,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   
   window.requestAnimationFrame(animate);
+  let walkingSoundPlayed = false;
   
   // The main game loop
   function animate(timestamp) {
@@ -333,14 +358,17 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         break;
       }
+      
       case "walking": {
-        heroX += (timestamp - lastTimestamp) / walkingSpeed;
+        
 
-        walkingsound.push.play();
-        
-          // let audio = new Audio("footsteps.mp3");
-          // audio.play();
-        
+        if (!walkingSoundPlayed) {
+          walkingsound.push.play();
+          console.log("walking sound played !");
+          walkingSoundPlayed = true; // Set the flag to true to indicate that the sound has been played
+        }
+
+        heroX += (timestamp - lastTimestamp) / walkingSpeed;
   
         const [nextPlatform] = thePlatformTheStickHits();
         if (nextPlatform) {
@@ -348,12 +376,22 @@ document.addEventListener("DOMContentLoaded", function () {
           const maxHeroX = nextPlatform.x + nextPlatform.w - heroDistanceFromEdge;
           if (heroX > maxHeroX) {
             heroX = maxHeroX;
+
+            walkingsound.push.stop()
+            console.log("walking sound stopped");
+            walkingSoundPlayed = false;
+
             phase = "transitioning";
           }
         } else {
           // If hero won't reach another platform then limit it's position at the end of the pole
           const maxHeroX = sticks.last().x + sticks.last().length + heroWidth;
           if (heroX > maxHeroX) {
+
+            walkingsound.push.stop()
+            console.log("walking sound stopped");
+            walkingSoundPlayed = false;
+
             heroX = maxHeroX;
             phase = "falling";
           }
@@ -376,6 +414,15 @@ document.addEventListener("DOMContentLoaded", function () {
         break;
       }
       case "falling": {
+
+        ninjasound.push.stop();
+
+        if (!fallingSoundPlayed) {
+          fallingsound.push.play();
+          console.log("falling sound played !");
+          fallingSoundPlayed = true; // Set the flag to true to indicate that the sound has been played
+        }
+
         if (sticks.last().rotation < 180)
           sticks.last().rotation += (timestamp - lastTimestamp) / turningSpeed;
   
@@ -450,6 +497,10 @@ document.addEventListener("DOMContentLoaded", function () {
     event.preventDefault();
     startGame()
     startButton.style.display = "none";
+
+    ninjasound.push.play();
+    console.log("bg music is played !");
+
   });
 
   function drawPlatforms() {
