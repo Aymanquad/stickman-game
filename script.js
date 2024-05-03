@@ -21,6 +21,9 @@ var fallingsound = {
   
 let fallingSoundPlayed = false;
 
+let currentCapColor = "red";
+
+
 
 Array.prototype.last = function () {
     return this[this.length - 1];
@@ -171,9 +174,13 @@ document.addEventListener("DOMContentLoaded", function () {
     fallingSoundPlayed = false;
 
     const themeSelect = document.getElementById("theme");
+    const capSelect = document.getElementById("cap-select");
+
     // Reset game progress
     startFlag = false;
+
     themeSelect.disabled = false;
+    capSelect.disabled = false;
  
     phase = "waiting";
     lastTimestamp = undefined;
@@ -264,10 +271,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.addEventListener("DOMContentLoaded", function () {
   const themeSelect = document.getElementById("theme");
+  const capSelect = document.getElementById("cap-select");
   const startButton = document.getElementById("start");
 
   startButton.addEventListener("click", function () {
       themeSelect.disabled = true;
+      capSelect.disabled = true;
 
       startFlag = true;
 
@@ -561,25 +570,24 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.fill();
 
 
-    drawRedCap(ctx);
+    //ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-
-  //   // Bandana
-  // const capSelect = document.getElementById("cap");
-
-  //   capSelect.addEventListener("change", function () {
-  //     const selectedCap = capSelect.value;
-  //     console.log("Selected Cap:", selectedCap); // Debug log
-  //     if (selectedCap === "blue") {
-  //         drawBlueCap(ctx);
-  //         console.log("Should be blue now");
-  //         draw(ctx);
-  //     } else {
-  //         drawRedCap(ctx);
-  //         draw(ctx);
-  //     }
-  // });
-  
+    // Draw the hero with the current cap color
+    switch (currentCapColor) {
+        case "red":
+            drawRedCap(ctx);
+            break;
+        case "blue":
+            drawBlueCap(ctx);
+            break;
+        case "green":
+            drawGreenCap(ctx);
+            break;
+        default:
+            // Default cap color
+            drawRedCap(ctx);
+            break;
+    }
 
     
 
@@ -714,6 +722,120 @@ function updateHeroCap(ctx, selectedCap) {
         trees.forEach((tree) => drawTree(tree.x, tree.color));
     }
 }
+
+
+
+function drawRedCap(ctx) {
+  // Red cap
+  ctx.fillStyle = "red";
+  ctx.fillRect(-heroWidth / 2 - 1, -12, heroWidth + 2, 4.5);
+  ctx.beginPath();
+  ctx.moveTo(-9, -14.5);
+  ctx.lineTo(-17, -18.5);
+  ctx.lineTo(-14, -8.5);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(-10, -10.5);
+  ctx.lineTo(-15, -3.5);
+  ctx.lineTo(-5, -7);
+  ctx.fill();
+
+  
+}
+
+function drawBlueCap(ctx) {
+  // Blue cap
+  ctx.fillStyle = "blue";
+  ctx.fillRect(-heroWidth / 2 - 1, -12, heroWidth + 2, 4.5);
+  ctx.beginPath();
+  ctx.moveTo(-9, -14.5);
+  ctx.lineTo(-17, -18.5);
+  ctx.lineTo(-14, -8.5);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(-10, -10.5);
+  ctx.lineTo(-15, -3.5);
+  ctx.lineTo(-5, -7);
+  ctx.fill();
+}
+
+function drawGreenCap(ctx) {
+  // Green cap
+  ctx.fillStyle = "green";
+  ctx.fillRect(-heroWidth / 2 - 1, -12, heroWidth + 2, 4.5);
+  ctx.beginPath();
+  ctx.moveTo(-9, -14.5);
+  ctx.lineTo(-17, -18.5);
+  ctx.lineTo(-14, -8.5);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(-10, -10.5);
+  ctx.lineTo(-15, -3.5);
+  ctx.lineTo(-5, -7);
+  ctx.fill();
+}
+
+
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  const capSelect = document.getElementById("cap-select");
+  const redCapButton = document.getElementById("red-cap-button");
+  const blueCapButton = document.getElementById("blue-cap-button");
+  const greenCapButton = document.getElementById("green-cap-button");
+
+  // Function to change cap color
+  function changeCapColor(color) {
+    currentCapColor = color;
+    const ctx = canvas.getContext("2d");
+
+    
+
+    // Draw new cap based on selected color
+    switch (color) {
+      case "red":
+        drawRedCap(ctx);
+        console.log("color changed to red !");
+        break;
+      case "blue":
+        drawBlueCap(ctx);
+        console.log("color changed to blue !");
+        break;
+      case "green":
+        drawGreenCap(ctx);
+        console.log("color changed to green !");
+
+        break;
+      default:
+        // Do nothing for unknown color
+        break;
+    }
+
+    ctx.save();
+    ctx.restore();
+    //drawHero(ctx);
+    
+  }
+
+
+  // Event listeners for cap select dropdown and buttons
+  capSelect.addEventListener("change", function(event) {
+    const selectedColor = event.target.value;
+    changeCapColor(selectedColor);
+  });
+
+  redCapButton.addEventListener("click", function() {
+    changeCapColor("red");
+  });
+
+  blueCapButton.addEventListener("click", function() {
+    changeCapColor("blue");
+  });
+
+  greenCapButton.addEventListener("click", function() {
+    changeCapColor("green");
+  });
+});
 
 
 
