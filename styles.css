@@ -100,3 +100,33 @@ body.night {
     background-color: #333; /* Dark background for night mode */
     color: #fff; /* White text for night mode */
 }
+
+/* CSS for mobile screens */
+@media (max-width: 576px) {
+  body {
+      font-size: 14px; /* Adjust font size for better readability on small screens */
+  }
+
+  #score {
+      font-size: 1.5em; /* Reduce font size of score */
+      top: 10px;
+      right: 10px;
+  }
+
+  #introduction {
+      width: 150px;
+      height: auto; /* Allow height to adjust dynamically */
+      font-size: 0.8em; /* Reduce font size */
+      top: 50%; /* Position at the center of the screen vertically */
+      left: 50%; /* Position at the center of the screen horizontally */
+      transform: translate(-50%, -50%); /* Center the introduction div */
+  }
+
+  #start,
+  #restart {
+      width: 80px; /* Reduce button size */
+      height: 80px; /* Reduce button size */
+      font-size: 1em; /* Adjust font size */
+      bottom: 10px;
+  }
+}
