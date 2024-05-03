@@ -1,6 +1,6 @@
 var walkingsound = {
   push : new Howl({
-    src: ['https://assets.codepen.io/21542/howler-push.mp3']
+    src: ['/footsteps.mp3']
   })
 }
   
@@ -336,10 +336,10 @@ document.addEventListener("DOMContentLoaded", function () {
       case "walking": {
         heroX += (timestamp - lastTimestamp) / walkingSpeed;
 
-        // walkingsound.push.play();
+        walkingsound.push.play();
         
-          let audio = new Audio("footsteps.mp3");
-          audio.play();
+          // let audio = new Audio("footsteps.mp3");
+          // audio.play();
         
   
         const [nextPlatform] = thePlatformTheStickHits();
