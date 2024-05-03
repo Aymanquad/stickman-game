@@ -1,3 +1,10 @@
+var walkingsound = {
+  push : new Howl({
+    src: ['https://assets.codepen.io/21542/howler-push.mp3']
+  })
+}
+  
+
 Array.prototype.last = function () {
     return this[this.length - 1];
   };
@@ -328,6 +335,12 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       case "walking": {
         heroX += (timestamp - lastTimestamp) / walkingSpeed;
+
+        // walkingsound.push.play();
+        
+          let audio = new Audio("footsteps.mp3");
+          audio.play();
+        
   
         const [nextPlatform] = thePlatformTheStickHits();
         if (nextPlatform) {
@@ -496,20 +509,10 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.arc(5, -7, 3, 0, Math.PI * 2, false);
     ctx.fill();
 
-    const capSelect = document.getElementById("cap");
 
     drawRedCap(ctx);
     
-    capSelect.addEventListener('change', function() {
 
-      let selectedCap = capSelect.value; // Default to red if not selected
-      if (!selectedCap || selectedCap == undefined) {
-        selectedCap = "red"; // Assign the default value "red"
-      }
-      console.log(selectedCap);
-      updateHeroCap(ctx, selectedCap);
-
-  });
   //   // Bandana
   // const capSelect = document.getElementById("cap");
 
