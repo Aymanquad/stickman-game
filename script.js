@@ -849,17 +849,6 @@ document.addEventListener("DOMContentLoaded", function() {
     changeCapColor(selectedColor);
   });
 
-  redCapButton.addEventListener("click", function() {
-    changeCapColor("red");
-  });
-
-  blueCapButton.addEventListener("click", function() {
-    changeCapColor("blue");
-  });
-
-  greenCapButton.addEventListener("click", function() {
-    changeCapColor("green");
-  });
 });
 
 
@@ -879,7 +868,7 @@ function drawLeaf(x, y) {
 function drawSun() {
   ctx.save();
   ctx.beginPath();
-  ctx.arc(100, 100, 30, 0, Math.PI * 2);
+  ctx.arc(150, 200, 30, 0, Math.PI * 2);
   ctx.fillStyle = "#FFC100"; // Light gray moon
   ctx.shadowColor = "#FF6500"; // Moon shadow color
   ctx.shadowBlur = 20; // Moon shadow blur
@@ -957,7 +946,7 @@ function startGame() {
 function drawMoon() {
   ctx.save();
   ctx.beginPath();
-  ctx.arc(100, 100, 30, 0, Math.PI * 2);
+  ctx.arc(150, 200, 30, 0, Math.PI * 2);
   ctx.fillStyle = "#EAEAEA"; // Light gray moon
   ctx.shadowColor = "#EAEAEA"; // Moon shadow color
   ctx.shadowBlur = 20; // Moon shadow blur
