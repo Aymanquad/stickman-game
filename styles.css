@@ -24,6 +24,14 @@ body {
   font-weight: 900;
 }
 
+#highscore {
+  position: absolute;
+  top: 100px;
+  right: 30px;
+  font-size: 1.2em;
+  font-weight: 700;
+}
+
 #introduction {
   width: 200px;
   height: 225px;
@@ -112,6 +120,12 @@ body.night {
       top: 10px;
       right: 10px;
   }
+
+  #score {
+    font-size: 1.1em; /* Reduce font size of score */
+    top: 20px;
+    right: 10px;
+}
 
   #introduction {
       width: 150px;

@@ -25,6 +25,29 @@ let currentCapColor = "red";
 
 
 
+// Get the highscore value from local storage, or default to 0 if it doesn't exist
+let highscore = localStorage.getItem('highscore') || 0;
+
+// Display the highscore
+document.getElementById('highscore-value').textContent = highscore;
+
+// Update the highscore if the current score is higher
+function updateHighscore(score) {
+    if (score > highscore) {
+        highscore = score;
+        localStorage.setItem('highscore', highscore);
+        document.getElementById('highscore-value').textContent = highscore;
+    }
+}
+
+// Function to reset the highscore
+function resetHighscore() {
+    highscore = 0;
+    localStorage.setItem('highscore', highscore);
+    document.getElementById('highscore-value').textContent = highscore;
+}
+
+
 Array.prototype.last = function () {
     return this[this.length - 1];
   };
@@ -175,6 +198,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const themeSelect = document.getElementById("theme");
     const capSelect = document.getElementById("cap-select");
+
+    updateHighscore(score);
 
     // Reset game progress
     startFlag = false;
