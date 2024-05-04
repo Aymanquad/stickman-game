@@ -412,7 +412,7 @@ window.addEventListener("touchstart", function (event) {
       lastTimestamp = undefined;
       phase = "stretching";
       window.requestAnimationFrame(animate);
-      
+
       event.preventDefault();
   }
 });
@@ -616,6 +616,8 @@ window.addEventListener("touchend", function (event) {
     event.preventDefault();
     startGame()
     startButton.style.display = "none";
+
+    e.preventDefault();
 
     ninjasound.push.play();
     console.log("bg music is played !");

@@ -110,6 +110,14 @@ body.night {
 }
 
 
+#introduction,
+#perfect,
+#score,
+#highscore-value {
+  user-select: none;
+}
+
+
 /* CSS for the stretch mode button 
 #stretch-mode {
   width: 120px;
@@ -135,9 +143,6 @@ body.night {
 @media screen and (max-width: 991px) {
   #stretch-mode {
       display: block; 
-  }
-  #introduction {
-    display: none;
   }
 }
 
