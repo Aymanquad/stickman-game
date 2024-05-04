@@ -381,28 +381,39 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-  window.addEventListener("touchstart", function (event) {
-    if (phase == "waiting") {
+// Prevent text selection and context menu on touch devices
+window.addEventListener("touchstart", function (event) {
+  event.preventDefault();
+});
+
+window.addEventListener("touchmove", function (event) {
+  event.preventDefault();
+});
+
+window.addEventListener("touchend", function (event) {
+  event.preventDefault();
+});
+
+// Additional touch event listeners for game controls
+window.addEventListener("touchstart", function (event) {
+  if (phase == "waiting") {
       if (!startFlag) return;
       lastTimestamp = undefined;
       phase = "stretching";
       window.requestAnimationFrame(animate);
-      event.preventDefault(); // Prevent default touch behavior
-    }
-});
-
-window.addEventListener("touchmove", function (event) {
-    event.preventDefault(); // Prevent scrolling on touch devices
+      event.preventDefault();
+  }
 });
 
 window.addEventListener("touchend", function (event) {
-    if (phase == "stretching") {
+  if (phase == "stretching") {
       if (!startFlag) return;
       introductionElement.style.opacity = 0;
       phase = "turning";
-      event.preventDefault(); // Prevent default touch behavior
-    }
+      event.preventDefault();
+  }
 });
+
 
 
 
