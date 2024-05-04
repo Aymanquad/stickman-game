@@ -331,13 +331,24 @@ document.addEventListener("DOMContentLoaded", function () {
   const capSelect = document.getElementById("cap-select");
   const startButton = document.getElementById("start");
 
-  startButton.addEventListener("click", function () {
+  startButton.addEventListener("click", function (e) {
       themeSelect.disabled = true;
       capSelect.disabled = true;
-
       startFlag = true;
 
+      
+
       ninjasound.push.play();
+
+      e.preventDefault();
+    
+      // Your existing start button logic goes here
+      // if (phase == "waiting") {
+      //     if (!startFlag) return;
+      //     lastTimestamp = undefined;
+      //     phase = "stretching";
+      //     window.requestAnimationFrame(animate);
+      // }
 
   });
 });
@@ -382,17 +393,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 // Prevent text selection and context menu on touch devices
-window.addEventListener("touchstart", function (event) {
-  event.preventDefault();
-});
+// window.addEventListener("touchstart", function (event) {
+//   event.preventDefault();
+// });
 
-window.addEventListener("touchmove", function (event) {
-  event.preventDefault();
-});
+// window.addEventListener("touchmove", function (event) {
+//   event.preventDefault();
+// });
 
-window.addEventListener("touchend", function (event) {
-  event.preventDefault();
-});
+// window.addEventListener("touchend", function (event) {
+//   event.preventDefault();
+// });
 
 // Additional touch event listeners for game controls
 window.addEventListener("touchstart", function (event) {
@@ -401,6 +412,7 @@ window.addEventListener("touchstart", function (event) {
       lastTimestamp = undefined;
       phase = "stretching";
       window.requestAnimationFrame(animate);
+      
       event.preventDefault();
   }
 });
