@@ -377,6 +377,9 @@ document.addEventListener("DOMContentLoaded", function () {
     canvas.height = window.innerHeight;
     draw(ctx);
   });
+  
+
+
 
   window.addEventListener("touchstart", function (event) {
     if (phase == "waiting") {
@@ -384,7 +387,12 @@ document.addEventListener("DOMContentLoaded", function () {
       lastTimestamp = undefined;
       phase = "stretching";
       window.requestAnimationFrame(animate);
+      event.preventDefault(); // Prevent default touch behavior
     }
+});
+
+window.addEventListener("touchmove", function (event) {
+    event.preventDefault(); // Prevent scrolling on touch devices
 });
 
 window.addEventListener("touchend", function (event) {
@@ -392,8 +400,12 @@ window.addEventListener("touchend", function (event) {
       if (!startFlag) return;
       introductionElement.style.opacity = 0;
       phase = "turning";
+      event.preventDefault(); // Prevent default touch behavior
     }
 });
+
+
+
 
   
   window.requestAnimationFrame(animate);
