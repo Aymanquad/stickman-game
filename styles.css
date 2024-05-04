@@ -109,8 +109,38 @@ body.night {
     color: #fff; /* White text for night mode */
 }
 
+
+/* CSS for the stretch mode button */
+#stretch-mode {
+  width: 120px;
+  height: 50px;
+  border: none;
+  background-color: #007bff; /* Blue color for the button */
+  color: white;
+  font-size: 1em;
+  font-weight: bold;
+  position: absolute;
+  bottom: 250px;
+  left: calc(50% - 60px); /* Center the button horizontally */
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Hover effect for the stretch mode button */
+#stretch-mode:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+@media screen and (max-width: 991px) {
+  #stretch-mode {
+      display: block; 
+  }
+}
+
+
 /* CSS for mobile screens */
 @media (max-width: 576px) {
+
   body {
       font-size: 14px; /* Adjust font size for better readability on small screens */
   }

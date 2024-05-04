@@ -25,6 +25,38 @@ let currentCapColor = "red";
 
 
 
+
+// // Function to handle touch events for stretching the stick
+// function handleTouchEvents() {
+//   const gameCanvas = document.getElementById('game');
+  
+//   // Event listener for touch start
+//   gameCanvas.addEventListener('touchstart', function(event) {
+//       event.preventDefault();
+//       if (gameStarted && isTouchDevice()) {
+//           startStretch(event.touches[0].clientX, event.touches[0].clientY);
+//       }
+//   });
+
+//   // Event listener for touch end
+//   gameCanvas.addEventListener('touchend', function(event) {
+//       event.preventDefault();
+//       if (gameStarted && isTouchDevice()) {
+//           endStretch();
+//       }
+//   });
+
+//   // Event listener for touch move (optional if you want to handle stretching while moving)
+//   gameCanvas.addEventListener('touchmove', function(event) {
+//       event.preventDefault();
+//       if (gameStarted && isTouchDevice()) {
+//           moveStretch(event.touches[0].clientX, event.touches[0].clientY);
+//       }
+//   });
+// }
+
+
+
 // Get the highscore value from local storage, or default to 0 if it doesn't exist
 let highscore = localStorage.getItem('highscore') || 0;
 
@@ -345,6 +377,24 @@ document.addEventListener("DOMContentLoaded", function () {
     canvas.height = window.innerHeight;
     draw(ctx);
   });
+
+  window.addEventListener("touchstart", function (event) {
+    if (phase == "waiting") {
+      if (!startFlag) return;
+      lastTimestamp = undefined;
+      phase = "stretching";
+      window.requestAnimationFrame(animate);
+    }
+});
+
+window.addEventListener("touchend", function (event) {
+    if (phase == "stretching") {
+      if (!startFlag) return;
+      introductionElement.style.opacity = 0;
+      phase = "turning";
+    }
+});
+
   
   window.requestAnimationFrame(animate);
   let walkingSoundPlayed = false;
