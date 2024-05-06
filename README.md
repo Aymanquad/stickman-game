@@ -16,3 +16,7 @@ This stickman game, originally sourced from open code on CodePen, has been signi
 
 
 Experience the classic stickman game with these exciting new features and unleash your gaming skills!
+
+<br><br>
+
+<a href="https://youtu.be/3RbCgOiSIHo">My Youtube Explanation video</a>
