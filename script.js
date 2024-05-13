@@ -1,3 +1,22 @@
+const firebaseConfig = {
+  apiKey: "AIzaSyDXMjzyNe37dJUB9UYkGOzoD5qAq2B_Aoo",
+  authDomain: "stickmangame-17a7a.firebaseapp.com",
+  databaseURL: "https://stickmangame-17a7a-default-rtdb.firebaseio.com",
+  projectId: "stickmangame-17a7a",
+  storageBucket: "stickmangame-17a7a.appspot.com",
+  messagingSenderId: "527701622301",
+  appId: "1:527701622301:web:580160c6fe3d0abfb550f4",
+  measurementId: "G-8P8WN73EB6"
+};
+
+// initialize firebase
+firebase.initializeApp(firebaseConfig);
+
+// reference your database
+var highscoreDB = firebase.database().ref("highscore");
+
+
+
 let ninjasound = {
   push : new Howl({
     src: ['/sounds/ninja-soundtrack.wav'],
@@ -24,12 +43,43 @@ let fallingSoundPlayed = false;
 let currentCapColor = "red";
 
 //highscore stuff
+//var initialHighscore = 0;
+let highscore;
 
+//get highscore from FireBase Db
+function getHighscoreFromFirebase(score) {
+  highscoreDB.once('value')
+    .then((snapshot) => {
+      const highscoreData = snapshot.val();
+      if (highscoreData !== null && typeof highscoreData === 'object') {
+        const highscoreValue = highscoreData.highscore;
+        if (typeof highscoreValue === 'number') {
+          highscore = highscoreValue;
 
-// highscore value from local storage (default to 0)
-let highscore = localStorage.getItem('highscore') || 0;
+          if (score > highscore) {
+            highscore = score;
+            highscoreDB.set({highscore : score});
+          }
 
-document.getElementById('highscore-value').textContent = highscore;
+          
+          console.log('High score retrieved from Firebase:', highscore);
+          document.getElementById('highscore-value').textContent = highscore;
+
+        } else {
+          console.error('High score value not found in Firebase or is not a number.');
+        }
+      } else {
+        console.error('High score data not found in Firebase or is not an object.');
+      }
+    })
+    .catch((error) => {
+      console.error('Error retrieving high score from Firebase:', error);
+    });
+}
+
+getHighscoreFromFirebase(0);
+
+//document.getElementById('highscore-value').textContent = initialHighscore;
 
 function updateHighscore(score) {
     if (score > highscore) {
@@ -196,7 +246,7 @@ function resetGame() {
   const themeSelect = document.getElementById("theme");
   const capSelect = document.getElementById("cap-select");
 
-  updateHighscore(score);
+  //updateHighscore(score);
 
   // Reset game progress
   startFlag = false;
@@ -554,11 +604,18 @@ function draw(ctx) {
   
 restartButton.addEventListener("click", function (event) {
   event.preventDefault();
+
+  //highscoreDB.set({highscore : 7});
+
+  getHighscoreFromFirebase(score);
+
   resetGame();
   restartButton.style.display = "none";
 });
 
-startButton.addEventListener("click", function (event) {
+
+
+startButton.addEventListener("click", function (e) {
   event.preventDefault();
   startGame()
   startButton.style.display = "none";
@@ -832,9 +889,6 @@ function drawSticks() {
 
 document.addEventListener("DOMContentLoaded", function() {
   const capSelect = document.getElementById("cap-select");
-  const redCapButton = document.getElementById("red-cap-button");
-  const blueCapButton = document.getElementById("blue-cap-button");
-  const greenCapButton = document.getElementById("green-cap-button");
 
   // Function to change cap color
   function changeCapColor(color) {
